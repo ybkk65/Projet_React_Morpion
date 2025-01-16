@@ -17,7 +17,6 @@ const SupRefreshed = () => {
             }
         } else {
             sessionStorage.removeItem("refreshed");
-            localStorage.removeItem("dernierePartie");
         }
     }, [location]);
 
@@ -34,6 +33,7 @@ function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/morpion" element={<Morpion />} />
                     <Route path="/classement" element={<Classement />} />
+                    <Route path="/jeu" element={<Morpion />} />
                 </Routes>
             </Router>
         </div>

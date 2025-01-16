@@ -17,11 +17,15 @@ function Grille({
                     scoreO,
                     isDraw,
                     stockerLocal,
+                    typeDeJeu,
 
                 }) {
     const [isDisabled, setIsDisabled] = useState(false);
     const [firstLoss, setFirstLoss] = useState(false);
 
+    const chechWinnerVariant = (grid) =>{
+
+    }
     const checkWinner = (grid) => {
         for (let row of grid) {
             if (row.every((cell) => cell === "O")) return "O";

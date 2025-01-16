@@ -1,22 +1,35 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ChoisirSymbole from "../composant/ChoisirSymbole.jsx";
 
 function Home() {
     const [pseudoJoueur1, setPseudoJoueur1] = useState("");
     const [pseudoJoueur2, setPseudoJoueur2] = useState("");
     const [modeDeJeu, setModeDeJeu] = useState(null);
+    const [typeDeJeu, setTypeDeJeu] = useState("");
     const navigate = useNavigate();
     const [alerts, setAlerts] = useState(null);
+    const [symboleChoisi, setSymboleChoisi] = useState("O"); // Par défaut, rond
 
+    const handleChoixChange = (symbole) => {
+        setSymboleChoisi(symbole);
+    };
 
     const lancerPartie = () => {
         if (modeDeJeu === "ordinateur" && !pseudoJoueur1) {
             setAlerts("Un pseudonyme est requis pour jouer contre l'ordinateur !");
         } else {
             const joueur1 = pseudoJoueur1 || "Joueur 1";
-            const joueur2 = modeDeJeu === "local" ? (pseudoJoueur2 || "Joueur 2") : "CPU";
+            const joueur2 =
+                modeDeJeu === "local" ? pseudoJoueur2 || "Joueur 2" : "CPU";
             navigate("/morpion", {
-                state: { pseudoJoueur1: joueur1, pseudoJoueur2: joueur2 ,modeDeJeu: modeDeJeu },
+                state: {
+                    pseudoJoueur1: joueur1,
+                    pseudoJoueur2: joueur2,
+                    modeDeJeu: modeDeJeu,
+                    symboleChoisi: symboleChoisi,
+                    typeDeJeu: typeDeJeu,
+                },
             });
         }
     };
@@ -24,64 +37,91 @@ function Home() {
     return (
         <>
             <div className={"flex flex-col justify-center items-center mx-auto"}>
-                <h2 className={"text-[#36CDCA] text-5xl mb-10"}>Bienvenue</h2>
-                <h3 className={"mb-6 text-xl"}>Choisissez un mode de jeu :</h3>
-                <div className={"flex gap-5 text-xl"}>
-                    <button
-                        onClick={() => setModeDeJeu("ordinateur")}
-                        className={"px-2 py-1 bg-[#F6BC47] rounded-md font-medium  text-black"}
-                    >
-                        Classique (Vs Ordinateur)
-                    </button>
-                    <button
-                        onClick={() => setModeDeJeu("local")}
-                        className={"px-2 py-1 bg-[#F6BC47] rounded-md font-medium  text-black"}
-                    >
-                        Local (2 Joueurs)
-                    </button>
+                <div className={"w-2/8"}>
+                    <ChoisirSymbole onChoixChange={handleChoixChange} />
+                    <div className={"flex flex-col gap-3"}>
+                        <button
+                            onClick={() => setTypeDeJeu("variant")}
+                            className={`bg-[#F2B336] py-3 w-full border-[#CB890F] border-b-4 rounded-xl text-black font-bold ${
+                                typeDeJeu === "variant" ? "opacity-50" : ""
+                            }`}
+                        >
+                            Classique Mode
+                        </button>
+                        <button
+                            onClick={() => setTypeDeJeu("normal")}
+                            className={`bg-[#2EC4BD] py-3 w-full border-[#20797A] border-b-4 rounded-xl text-black font-bold ${
+                                typeDeJeu === "normal" ? "opacity-50" : ""
+                            }`}
+                        >
+                            Variant Mode
+                        </button>
+                    </div>
+
+                    {(typeDeJeu === "variant" || typeDeJeu === "normal") && (
+                        <div className={"flex flex-col gap-3 mt-6"}>
+                            <button
+                                onClick={() => setModeDeJeu("ordinateur")}
+                                className={`bg-[#F2B336] py-3 w-full border-[#CB890F] border-b-4 rounded-xl text-black font-bold ${
+                                    modeDeJeu === "ordinateur" ? "opacity-50" : ""
+                                }`}
+                            >
+                                Classique (Vs Ordinateur)
+                            </button>
+                            <button
+                                onClick={() => setModeDeJeu("local")}
+                                className={`bg-[#2EC4BD] py-3 w-full border-[#20797A] border-b-4 rounded-xl text-black font-bold ${
+                                    modeDeJeu === "local" ? "opacity-50" : ""
+                                }`}
+                            >
+                                Local (2 Joueurs)
+                            </button>
+                        </div>
+                    )}
+
+                    {modeDeJeu === "ordinateur" && (
+                        <div className="mt-6 flex">
+                            <input
+                                type="text"
+                                value={pseudoJoueur1}
+                                onChange={(e) => setPseudoJoueur1(e.target.value)}
+                                className="px-4 py-2 border rounded-md w-full  text-black placeholder-gray-600 font-medium"
+                                placeholder="Entrez votre pseudo"
+                            />
+                            <p className={"text-amber-400 font-medium"}>{alerts}</p>
+                        </div>
+                    )}
+
+                    {modeDeJeu === "local" && (
+                        <div className="mt-6 flex flex-col gap-3 mt-6">
+                            <input
+                                type="text"
+                                value={pseudoJoueur1}
+                                onChange={(e) => setPseudoJoueur1(e.target.value)}
+                                className="px-4 py-2 border rounded-md  text-black placeholder-gray-600 font-medium"
+                                placeholder="Entrez le nom du joueur 1"
+                            />
+                            <input
+                                type="text"
+                                value={pseudoJoueur2}
+                                onChange={(e) => setPseudoJoueur2(e.target.value)}
+                                className="px-4 py-2 border rounded-md  text-black placeholder-gray-600 font-medium"
+                                placeholder="Entrez le nom du joueur 2"
+                            />
+                        </div>
+                    )}
+
+                    {(modeDeJeu === "ordinateur" || modeDeJeu === "local") && (
+                        <div className="flex justify-center mt-5">
+                            <button
+                                onClick={lancerPartie}
+                                className="px-6 py-2 bg-[#B6CAD3] text-white rounded font-medium text-black"
+                            >
+                                Lancer la Partie
+                            </button>
+                        </div>
+                    )}
                 </div>
-
-                {modeDeJeu === "ordinateur" && (
-                    <div className="mt-6">
-                        <label className="block text-xl mb-2">Pseudonyme Joueur :</label>
-                        <input
-                            type="text"
-                            value={pseudoJoueur1}
-                            onChange={(e) => setPseudoJoueur1(e.target.value)}
-                            className="px-4 py-2 border rounded-md  text-black"
-                            placeholder="Entrez votre pseudo"
-                        />
-                        <p className={"text-amber-400 font-medium"}>{alerts}</p>
-                    </div>
-                )}
-
-                {modeDeJeu === "local" && (
-                    <div className="mt-6">
-                        <label className="block text-xl mb-2">Pseudonyme Joueur 1 :</label>
-                        <input
-                            type="text"
-                            value={pseudoJoueur1}
-                            onChange={(e) => setPseudoJoueur1(e.target.value)}
-                            className="px-4 py-2 border rounded-md  text-black"
-                            placeholder="Entrez le pseudo du joueur 1"
-                        />
-                        <label className="block text-xl mt-4 mb-2">Pseudonyme Joueur 2 :</label>
-                        <input
-                            type="text"
-                            value={pseudoJoueur2}
-                            onChange={(e) => setPseudoJoueur2(e.target.value)}
-                            className="px-4 py-2 border rounded-md  text-black"
-                            placeholder="Entrez le pseudo du joueur 2"
-                        />
-                    </div>
-                )}
-
-                <button
-                    onClick={lancerPartie}
-                    className="px-6 py-2 bg-[#B6CAD3] text-white rounded mt-10 font-medium  text-black"
-                >
-                    Lancer la Partie
-                </button>
             </div>
         </>
     );

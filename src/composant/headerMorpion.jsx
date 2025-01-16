@@ -2,9 +2,10 @@ import React from 'react';
 import croix from "../assets/cross.svg";
 import rond from "../assets/circle.svg";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faRotateRight} from "@fortawesome/free-solid-svg-icons";
+import {faArrowRightFromBracket, faRotateRight} from "@fortawesome/free-solid-svg-icons";
 
-function HeaderMorpion({currentPlayer,resetGrid,sauvegarderDernierePartie}) {
+
+function HeaderMorpion({currentPlayer,resetGrid,sauvegarderDernierePartie , quitter}) {
     const handleClick = () => {
         resetGrid();
         sauvegarderDernierePartie();
@@ -21,13 +22,21 @@ function HeaderMorpion({currentPlayer,resetGrid,sauvegarderDernierePartie}) {
                 <p className={""}><span className={"font-bold"}>{currentPlayer}</span> turn</p>
             </div>
 
-            <button
-                className={"px-2 py-1 rounded-lg bg-[#A5BDC8] border-b-4 border-[#688695] transition-all duration-150 ease-in-out transform hover:scale-105 hover:shadow-lg"}
-                onClick={handleClick}
-            >
-                <FontAwesomeIcon className={"mt-0.5"} icon={faRotateRight} size="lg" color="#1C333D"/>
-            </button>
+            <div>
+                <button
+                    className={"px-2 py-1 rounded-lg bg-[#A5BDC8] border-b-4 border-[#688695] transition-all duration-150 ease-in-out transform hover:scale-105 hover:shadow-lg"}
+                    onClick={handleClick}
+                >
+                    <FontAwesomeIcon className={"mt-0.5"} icon={faRotateRight} size="lg" color="#1C333D"/>
+                </button>
+                <button
+                    className={"px-2 py-1 rounded-lg bg-red-500 ml-2 border-b-4 border-red-700 transition-all duration-150 ease-in-out transform hover:scale-105 hover:shadow-lg"}
+                    onClick={quitter}
+                >
 
+                    <FontAwesomeIcon className={"mt-0.5"} icon={faArrowRightFromBracket } size="lg" />
+                </button>
+            </div>
         </div>
     )
 }

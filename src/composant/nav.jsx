@@ -30,6 +30,13 @@ function Nav() {
                 >
                     Classement
                 </li>
+
+                <li
+                    className="cursor-pointer"
+                    onClick={() => handleNavigation("/jeu")}
+                >
+                    Jeu
+                </li>
             </ul>
         </div>
     );

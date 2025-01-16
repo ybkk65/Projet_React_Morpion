@@ -5,15 +5,15 @@ import { useNavigate } from "react-router-dom";
 import Resultat from "../composant/banniereResultat.jsx";
 import HeaderMorpion from "../composant/headerMorpion.jsx";
 import FooterMorpion from "../composant/footerMorpion.jsx";
-import ContinuerJouer from "../composant/continuerJouer.jsx"; // Assurez-vous d'importer le bon composant
+import ContinuerJouer from "../composant/continuerJouer.jsx";
 
 function Morpion() {
     const navigate = useNavigate();
     const location = useLocation();
-    const { pseudoJoueur1, pseudoJoueur2, modeDeJeu } = location.state || {};
+    const { pseudoJoueur1, pseudoJoueur2, modeDeJeu ,symboleChoisi ,typeDeJeu} = location.state || {};
 
     const [grid, setGrid] = useState(Array(3).fill(Array(3).fill(null)));
-    const [currentPlayer, setCurrentPlayer] = useState("O");
+    const [currentPlayer, setCurrentPlayer] = useState(symboleChoisi || 'O');
     const [winner, setWinner] = useState(null);
     const [isDraw, setIsDraw] = useState(false);
     const [scoreX, setScoreX] = useState(0);
@@ -116,20 +116,31 @@ function Morpion() {
         }
     }, [location.pathname]);
 
+      useEffect(() => {
+    if (location.pathname === '/jeu' && localStorage.getItem("dernierePartie")) {
+        setRefreshed(true);
+    }
+}, [location.pathname]);
+
+
+
+    
+
     return (
         <div className={"bg-[#182831] w-[470px] drop-shadow-xl p-5 rounded-xl mx-auto relative"}>
             {(winner || isDraw) && (
                 <Resultat winner={winner} quitter={quitter} continueToPlay={continueToPlay} />
             )}
 
-            {refreshed === true && (
-                <ContinuerJouer quitter={quitter} continueToPlay={reprendreGame} />
-            )}                                                                 
+           {refreshed === true  && (
+               <ContinuerJouer quitter={quitter} continueToPlay={reprendreGame} />
+           )}
 
             <HeaderMorpion
                 currentPlayer={currentPlayer}
                 resetGrid={resetGrid}
                 sauvegarderDernierePartie={sauvegarderDernierePartie}
+                quitter={quitter}
             />
             <div>
                 <Grille
@@ -147,6 +158,7 @@ function Morpion() {
                     scoreO={scoreO}
                     isDraw={isDraw}
                     stockerLocal={stockerLocal}
+                    typeDeJeu={typeDeJeu}
                 />
             </div>
 
