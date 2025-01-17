@@ -124,14 +124,14 @@ function GrilleVariant({
     }, [grid, currentPlayer, winner, isDraw, scoreX, scoreO, Ties]);
 
     return (
-        <div className="space-y-4 w-full mx-auto mt-10 p-3.5 relative">
+        <div className="space-y-4 w-full mx-auto mt-2 sm:mt-10 p-3.5 relative">
             {grid.map((row, rowIndex) => (
                 <div key={rowIndex} className="flex justify-between">
                     {row.map((cell, colIndex) => (
                         <div
                             key={colIndex}
                             onClick={() => handleClick(rowIndex, colIndex)}
-                            className="h-28 w-28 flex justify-center items-center border-b-8 border-[#0E1E27] p-4 rounded-2xl bg-[#1D313C] shadow-2xl cursor-pointer select-none"
+                            className="h-20 w-20 sm:h-28 sm:w-28 flex justify-center items-center border-b-8 border-[#0E1E27] p-4 rounded-2xl bg-[#1D313C] shadow-2xl cursor-pointer select-none"
                             style={{ pointerEvents: isDisabled ? "none" : "auto" }}
                         >
                             {cell ? (

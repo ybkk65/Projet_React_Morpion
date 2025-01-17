@@ -135,7 +135,7 @@ function Morpion() {
     
 
     return (
-        <div className={`bg-[#182831] w-[470px] drop-shadow-xl p-5 rounded-xl mx-auto relative ${typeJeu === "variant" ? "border-8 border-rounded-xl border-fuchsia-700 shadow-fuchsia-500 shadow-2xl" : ""}`}>
+        <div className={`bg-[#182831] sm:w-[470px] w-[90%] drop-shadow-xl p-3 sm:p-5 rounded-xl mx-auto relative ${typeJeu === "variant" ? "border-8 border-rounded-xl border-fuchsia-700 shadow-fuchsia-500 shadow-2xl" : ""}`}>
             {(winner || isDraw) && (
                 <Resultat winner={winner} quitter={quitter} continueToPlay={continueToPlay} />
             )}

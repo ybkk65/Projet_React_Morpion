@@ -17,7 +17,7 @@ function Home() {
 
     const lancerPartie = () => {
         if (modeDeJeu === "ordinateur" && !pseudoJoueur1) {
-            setAlerts("Un pseudonyme est requis pour jouer contre l'ordinateur !");
+            setAlerts("pseudo requis pour jouer !");
         } else {
             const joueur1 = pseudoJoueur1 || "Joueur 1";
             const joueur2 =
@@ -37,8 +37,8 @@ function Home() {
 
     return (
         <>
-            <div className={"flex flex-col justify-center items-center mx-auto"}>
-                <div className={"w-2/8 flex flex-col"}>
+            <div className={"flex flex-col  justify-center items-center mx-auto"}>
+                <div className={"w-2/8  flex flex-col"}>
                     <ChoisirSymbole onChoixChange={handleChoixChange} />
                     <div className={"flex flex-col gap-3"}>
                         <button
@@ -89,7 +89,7 @@ function Home() {
                                 className="px-4 py-2 border rounded-md w-full  text-black placeholder-gray-600 font-medium"
                                 placeholder="Entrez votre pseudo"
                             />
-                            <p className={"text-amber-400 mt-2 font-medium"}>{alerts}</p>
+                            <p className={"text-amber-400 mt-2 max-w-56 sm:text-sm font-medium"}>{alerts}</p>
                         </div>
                     )}
 
@@ -113,7 +113,7 @@ function Home() {
                     )}
 
                     {(modeDeJeu === "ordinateur" || modeDeJeu === "local") && (
-                        <div className="flex flex-col justify-center mt-5">
+                        <div className="flex flex-col justify-center mt-5 mb-20">
                             <button
                                 onClick={lancerPartie}
                                 className="px-6 py-2 bg-[#B6CAD3] text-white rounded font-medium text-black"
