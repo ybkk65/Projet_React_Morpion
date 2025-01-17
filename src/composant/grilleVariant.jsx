@@ -77,9 +77,13 @@ function GrilleVariant({
         const potentialWinner = checkWinner(newGrid);
         if (potentialWinner) {
             setWinner(potentialWinner);
+            setHistoryO([]);
+            setHistoryX([]);
             if (potentialWinner === "O" && !firstLoss && modeDeJeu === "ordinateur") {
                 setFirstLoss(true);
                 stockerLocal(scoreX);
+                setHistoryO([]);
+                setHistoryX([]);
             }
         } else if (checkDraw(newGrid)) {
             setIsDraw(true);

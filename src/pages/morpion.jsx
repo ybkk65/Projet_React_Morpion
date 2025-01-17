@@ -29,12 +29,11 @@ function Morpion() {
     const id = Date.now();
 
     const resetGrid = () => {
-        setGrid(Array(3).fill(Array(3).fill(null)));
+        setGrid(Array.from({ length: 3 }, () => Array(3).fill(null)));
         setCurrentPlayer("O");
         setWinner(null);
         setIsDraw(false);
     };
-
     const sauvegarderPartie = (partie) => {
         const historique = JSON.parse(localStorage.getItem("historiqueParties")) || [];
         historique.push(partie);
