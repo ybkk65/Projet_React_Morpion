@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
-import Home from "./pages/Home";
+import Home from "./pages/home.jsx";
 import Nav from "./composant/nav.jsx";
 import Morpion from "./pages/morpion.jsx";
 import Classement from "./pages/classement.jsx";
