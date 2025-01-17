@@ -6,20 +6,25 @@ import Resultat from "../composant/banniereResultat.jsx";
 import HeaderMorpion from "../composant/headerMorpion.jsx";
 import FooterMorpion from "../composant/footerMorpion.jsx";
 import ContinuerJouer from "../composant/continuerJouer.jsx";
+import GrilleVariant from "../composant/grilleVariant.jsx";
 
 function Morpion() {
     const navigate = useNavigate();
     const location = useLocation();
-    const { pseudoJoueur1, pseudoJoueur2, modeDeJeu ,symboleChoisi ,typeDeJeu} = location.state || {};
+    const { pseudojoueur1, pseudojoueur2, modedeJeu  ,typeDeJeu} = location.state || {};
 
     const [grid, setGrid] = useState(Array(3).fill(Array(3).fill(null)));
-    const [currentPlayer, setCurrentPlayer] = useState(symboleChoisi || 'O');
+    const [currentPlayer, setCurrentPlayer] = useState('O');
+    const [typeJeu, setTypeJeu] = useState(typeDeJeu || 'normal');
+    const [modeDeJeu, setModeDeJeu] = useState(modedeJeu);
     const [winner, setWinner] = useState(null);
     const [isDraw, setIsDraw] = useState(false);
     const [scoreX, setScoreX] = useState(0);
     const [scoreO, setScoreO] = useState(0);
     const [Ties, setTies] = useState(0);
     const [refreshed, setRefreshed] = useState(false);
+    const [pseudoJoueur1, setPseudoJoueur1] = useState(pseudojoueur1);
+    const [pseudoJoueur2, setPseudoJoueur2] = useState(pseudojoueur2);
 
     const id = Date.now();
 
@@ -43,6 +48,7 @@ function Morpion() {
                 player2: pseudoJoueur2,
                 currentPlayer: currentPlayer,
             },
+            mode:{mode : modeDeJeu,type : typeJeu,},
             score: { score1: scoreX, score2: scoreO, ties: Ties },
             resultats: { winner: winner, isDraw: isDraw },
             grille: grid,
@@ -93,12 +99,15 @@ function Morpion() {
             setScoreO(partie.score.score2);
             setScoreX(partie.score.score1);
             setTies(partie.score.ties);
-
+            setPseudoJoueur1(partie.players.player1);
+            setPseudoJoueur2(partie.players.player2);
             setCurrentPlayer(partie.players.currentPlayer);
             setWinner(partie.resultats.winner);
             setIsDraw(partie.resultats.isDraw);
             setGrid(partie.grille);
             setRefreshed(false);
+            setModeDeJeu(partie.mode.mode);
+            setTypeJeu(partie.mode.type);
             sessionStorage.setItem('refreshed', 'false'); 
         }
     }
@@ -127,7 +136,7 @@ function Morpion() {
     
 
     return (
-        <div className={"bg-[#182831] w-[470px] drop-shadow-xl p-5 rounded-xl mx-auto relative"}>
+        <div className={`bg-[#182831] w-[470px] drop-shadow-xl p-5 rounded-xl mx-auto relative ${typeJeu === "variant" ? "border-8 border-rounded-xl border-fuchsia-700 shadow-fuchsia-500 shadow-2xl" : ""}`}>
             {(winner || isDraw) && (
                 <Resultat winner={winner} quitter={quitter} continueToPlay={continueToPlay} />
             )}
@@ -143,6 +152,24 @@ function Morpion() {
                 quitter={quitter}
             />
             <div>
+                {typeJeu === "variant"  && (
+                <GrilleVariant
+                    grid={grid}
+                    setGrid={setGrid}
+                    currentPlayer={currentPlayer}
+                    setCurrentPlayer={setCurrentPlayer}
+                    winner={winner}
+                    setWinner={setWinner}
+                    setIsDraw={setIsDraw}
+                    modeDeJeu={modeDeJeu}
+                    sauvegarderDernierePartie={sauvegarderDernierePartie}
+                    scoreX={scoreX}
+                    scoreO={scoreO}
+                    isDraw={isDraw}
+                    stockerLocal={stockerLocal}
+                />
+                )}
+                {typeJeu === "normal"  && (
                 <Grille
                     grid={grid}
                     setGrid={setGrid}
@@ -158,8 +185,9 @@ function Morpion() {
                     scoreO={scoreO}
                     isDraw={isDraw}
                     stockerLocal={stockerLocal}
-                    typeDeJeu={typeDeJeu}
+
                 />
+                )}
             </div>
 
             <FooterMorpion
@@ -168,6 +196,7 @@ function Morpion() {
                 scoreX={scoreX}
                 Ties={Ties}
                 scoreO={scoreO}
+                typeDeJeu={typeJeu}
             />
         </div>
     );

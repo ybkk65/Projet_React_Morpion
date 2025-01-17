@@ -554,6 +554,10 @@ video {
   display: none;
 }
 
+.fixed {
+  position: fixed;
+}
+
 .absolute {
   position: absolute;
 }
@@ -564,6 +568,14 @@ video {
 
 .inset-0 {
   inset: 0px;
+}
+
+.bottom-0 {
+  bottom: 0px;
+}
+
+.left-0 {
+  left: 0px;
 }
 
 .z-50 {
@@ -693,6 +705,14 @@ video {
 
 .mt-5 {
   margin-top: 1.25rem;
+}
+
+.ml-1 {
+  margin-left: 0.25rem;
+}
+
+.mr-1 {
+  margin-right: 0.25rem;
 }
 
 .block {
@@ -875,6 +895,14 @@ video {
   width: 33.333333%;
 }
 
+.w-1\/2 {
+  width: 50%;
+}
+
+.shrink {
+  flex-shrink: 1;
+}
+
 .table-auto {
   table-layout: auto;
 }
@@ -987,6 +1015,14 @@ video {
   border-width: 2px;
 }
 
+.border-4 {
+  border-width: 4px;
+}
+
+.border-8 {
+  border-width: 8px;
+}
+
 .border-b-8 {
   border-bottom-width: 8px;
 }
@@ -1035,6 +1071,11 @@ video {
   border-color: rgb(203 137 15 / var(--tw-border-opacity, 1));
 }
 
+.border-fuchsia-700 {
+  --tw-border-opacity: 1;
+  border-color: rgb(162 28 175 / var(--tw-border-opacity, 1));
+}
+
 .border-b-\[\] {
   border-bottom-color: ;
 }
@@ -1046,6 +1087,11 @@ video {
 .border-b-\[\#0E1E27\] {
   --tw-border-opacity: 1;
   border-bottom-color: rgb(14 30 39 / var(--tw-border-opacity, 1));
+}
+
+.border-b-fuchsia-700 {
+  --tw-border-opacity: 1;
+  border-bottom-color: rgb(162 28 175 / var(--tw-border-opacity, 1));
 }
 
 .bg-\[\#203741\] {
@@ -1325,6 +1371,11 @@ video {
   line-height: 1rem;
 }
 
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
 .font-bold {
   font-weight: 700;
 }
@@ -1441,6 +1492,10 @@ video {
   opacity: 0.5;
 }
 
+.opacity-100 {
+  opacity: 1;
+}
+
 .shadow-lg {
   --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
@@ -1463,6 +1518,11 @@ video {
   --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
   --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.shadow-fuchsia-500 {
+  --tw-shadow-color: #d946ef;
+  --tw-shadow: var(--tw-shadow-colored);
 }
 
 .drop-shadow-xl {
@@ -1488,8 +1548,16 @@ video {
   transition-duration: 150ms;
 }
 
+.duration-300 {
+  transition-duration: 300ms;
+}
+
 .ease-in-out {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ease-out {
+  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
 }
 
 .hover\:scale-105:hover {

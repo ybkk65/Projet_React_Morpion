@@ -14,7 +14,7 @@ const ChoisirSymbole = ({ onChoixChange }) => {
 
     return (
         <div className={"bg-[#182831] rounded-xl px-8 py-4 flex flex-col justify-center items-center mb-6"}>
-            <h2 className={"mb-4"}>Choisissez un symbole</h2>
+            <h2 className={"mb-4"}>Choisissez le symbole du player 1</h2>
             <div className={"flex gap-2 bg-[#203741] p-2 rounded-lg mb-2"}>
                 <button
                     className={`py-3 px-16 rounded  ${choix === 'X' ? 'bg-[#A5BDC8] text-[#182831]' : 'text-[#A5BDC8] '}`}

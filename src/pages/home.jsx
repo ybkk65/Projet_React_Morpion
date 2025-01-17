@@ -22,11 +22,12 @@ function Home() {
             const joueur1 = pseudoJoueur1 || "Joueur 1";
             const joueur2 =
                 modeDeJeu === "local" ? pseudoJoueur2 || "Joueur 2" : "CPU";
+
             navigate("/morpion", {
                 state: {
-                    pseudoJoueur1: joueur1,
-                    pseudoJoueur2: joueur2,
-                    modeDeJeu: modeDeJeu,
+                    pseudojoueur1: symboleChoisi === "X" ? joueur1 : joueur2,
+                    pseudojoueur2: symboleChoisi === "X" ? joueur2 : joueur1,
+                    modedeJeu: modeDeJeu,
                     symboleChoisi: symboleChoisi,
                     typeDeJeu: typeDeJeu,
                 },
@@ -37,21 +38,21 @@ function Home() {
     return (
         <>
             <div className={"flex flex-col justify-center items-center mx-auto"}>
-                <div className={"w-2/8"}>
+                <div className={"w-2/8 flex flex-col"}>
                     <ChoisirSymbole onChoixChange={handleChoixChange} />
                     <div className={"flex flex-col gap-3"}>
                         <button
-                            onClick={() => setTypeDeJeu("variant")}
+                            onClick={() => setTypeDeJeu("normal")}
                             className={`bg-[#F2B336] py-3 w-full border-[#CB890F] border-b-4 rounded-xl text-black font-bold ${
-                                typeDeJeu === "variant" ? "opacity-50" : ""
+                                typeDeJeu === "normal" ? "opacity-50" : ""
                             }`}
                         >
                             Classique Mode
                         </button>
                         <button
-                            onClick={() => setTypeDeJeu("normal")}
+                            onClick={() => setTypeDeJeu("variant")}
                             className={`bg-[#2EC4BD] py-3 w-full border-[#20797A] border-b-4 rounded-xl text-black font-bold ${
-                                typeDeJeu === "normal" ? "opacity-50" : ""
+                                typeDeJeu === "variant" ? "opacity-50" : ""
                             }`}
                         >
                             Variant Mode
@@ -80,7 +81,7 @@ function Home() {
                     )}
 
                     {modeDeJeu === "ordinateur" && (
-                        <div className="mt-6 flex">
+                        <div className="mt-6 flex flex-col">
                             <input
                                 type="text"
                                 value={pseudoJoueur1}
@@ -88,7 +89,7 @@ function Home() {
                                 className="px-4 py-2 border rounded-md w-full  text-black placeholder-gray-600 font-medium"
                                 placeholder="Entrez votre pseudo"
                             />
-                            <p className={"text-amber-400 font-medium"}>{alerts}</p>
+                            <p className={"text-amber-400 mt-2 font-medium"}>{alerts}</p>
                         </div>
                     )}
 
@@ -112,7 +113,7 @@ function Home() {
                     )}
 
                     {(modeDeJeu === "ordinateur" || modeDeJeu === "local") && (
-                        <div className="flex justify-center mt-5">
+                        <div className="flex flex-col justify-center mt-5">
                             <button
                                 onClick={lancerPartie}
                                 className="px-6 py-2 bg-[#B6CAD3] text-white rounded font-medium text-black"

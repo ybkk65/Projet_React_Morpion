@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Nav from "./composant/nav.jsx";
 import Morpion from "./pages/morpion.jsx";
 import Classement from "./pages/classement.jsx";
+import Footer from "./composant/footer.jsx";
 
 const SupRefreshed = () => {
     const location = useLocation();
@@ -36,6 +37,7 @@ function App() {
                     <Route path="/jeu" element={<Morpion />} />
                 </Routes>
             </Router>
+            <Footer/>
         </div>
     );
 }
