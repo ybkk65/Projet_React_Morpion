@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import rond from "/src/assets/circle.svg";
 import croix from "/src/assets/cross.svg";
 
-function Grille({
+function GrilleVariant({
                     grid,
                     setGrid,
                     currentPlayer,
@@ -17,10 +17,12 @@ function Grille({
                     scoreO,
                     isDraw,
                     stockerLocal,
-
                 }) {
     const [isDisabled, setIsDisabled] = useState(false);
     const [firstLoss, setFirstLoss] = useState(false);
+    const [historyX, setHistoryX] = useState([]);
+    const [historyO, setHistoryO] = useState([]);
+
 
     const checkWinner = (grid) => {
         for (let row of grid) {
@@ -56,12 +58,32 @@ function Grille({
             )
         );
 
+        if (currentPlayer === "X") {
+            const newHistoryX = [...historyX, [rowIndex, colIndex]];
+            if (newHistoryX.length > 3) {
+                const [removedRow, removedCol] = newHistoryX.shift();
+                newGrid[removedRow][removedCol] = null;
+            }
+            setHistoryX(newHistoryX);
+        } else if (currentPlayer === "O") {
+            const newHistoryO = [...historyO, [rowIndex, colIndex]];
+            if (newHistoryO.length > 3) {
+                const [removedRow, removedCol] = newHistoryO.shift();
+                newGrid[removedRow][removedCol] = null;
+            }
+            setHistoryO(newHistoryO);
+        }
+
         const potentialWinner = checkWinner(newGrid);
         if (potentialWinner) {
             setWinner(potentialWinner);
+            setHistoryO([]);
+            setHistoryX([]);
             if (potentialWinner === "O" && !firstLoss && modeDeJeu === "ordinateur") {
                 setFirstLoss(true);
                 stockerLocal(scoreX);
+                setHistoryO([]);
+                setHistoryX([]);
             }
         } else if (checkDraw(newGrid)) {
             setIsDraw(true);
@@ -96,7 +118,7 @@ function Grille({
 
     useEffect(() => {
         const refreshed = sessionStorage.getItem("refreshed");
-        if(refreshed === 'false'){
+        if(refreshed === 'false') {
             sauvegarderDernierePartie();
         }
     }, [grid, currentPlayer, winner, isDraw, scoreX, scoreO, Ties]);
@@ -109,10 +131,19 @@ function Grille({
                         <div
                             key={colIndex}
                             onClick={() => handleClick(rowIndex, colIndex)}
-                            className="h-20 w-20 sm:h-28 sm:w-28  flex justify-center items-center border-b-8 border-[#0E1E27] p-4 rounded-2xl bg-[#1D313C] shadow-2xl cursor-pointer select-none"
+                            className="h-20 w-20 sm:h-28 sm:w-28 flex justify-center items-center border-b-8 border-[#0E1E27] p-4 rounded-2xl bg-[#1D313C] shadow-2xl cursor-pointer select-none"
                             style={{ pointerEvents: isDisabled ? "none" : "auto" }}
                         >
-                            {cell ? <img src={cell === "O" ? rond : croix} alt="" /> : null}
+                            {cell ? (
+                                <img
+                                    src={cell === "O" ? rond : croix}
+                                    alt=""
+                                    className={`transition-all duration-300 ${cell === "O" ? "opacity-100" : "opacity-100"}`}
+                                    style={{
+                                        animation: cell === "O" ? "shrink 0.5s ease-out" : "none",
+                                    }}
+                                />
+                            ) : null}
                         </div>
                     ))}
                 </div>
@@ -121,4 +152,4 @@ function Grille({
     );
 }
 
-export default Grille;
+export default GrilleVariant;

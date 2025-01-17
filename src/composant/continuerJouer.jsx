@@ -1,25 +1,12 @@
 import React from "react";
-import rond from "/src/assets/circle.svg";
-import croix from "/src/assets/cross.svg";
 import PropTypes from "prop-types";
 
-function Resultat({ winner, quitter, continueToPlay }) {
+function ContinuerJouer({ quitter, continueToPlay }) {
     return (
         <div className="resultat-overlay absolute inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50 rounded-2xl">
             <div className="w-full bg-[#182831] text-white font-bold h-[200px] ">
                 <h1 className="sm:text-4xl text-xl flex justify-center items-center m-9">
-                    {winner ? (
-                        <div className="flex items-center">
-                            <img
-                                src={winner === "O" ? rond : croix}
-                                alt={winner === "O" ? "Rond" : "Croix"}
-                                className="w-10 h-10 mr-6"
-                            />
-                            a gagné le round
-                        </div>
-                    ) : (
-                        "Match nul !"
-                    )}
+                   Reprendre la partie ?
                 </h1>
 
                 <div className="flex gap-8 justify-center">
@@ -41,10 +28,10 @@ function Resultat({ winner, quitter, continueToPlay }) {
     );
 }
 
-Resultat.propTypes = {
+ContinuerJouer.propTypes = {
     winner: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])]),
     quitter: PropTypes.func.isRequired,
     continueToPlay: PropTypes.func.isRequired,
 };
 
-export default Resultat;
+export default ContinuerJouer;
