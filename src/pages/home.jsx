@@ -28,7 +28,7 @@ function Home() {
                     pseudojoueur1: symboleChoisi === "X" ? joueur1 : joueur2,
                     pseudojoueur2: symboleChoisi === "X" ? joueur2 : joueur1,
                     modedeJeu: modeDeJeu,
-                    symboleChoisi: symboleChoisi,
+                    symbolechoisi: symboleChoisi,
                     typeDeJeu: typeDeJeu,
                 },
             });

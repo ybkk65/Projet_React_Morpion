@@ -3,27 +3,44 @@ import rond from "/src/assets/circle.svg";
 import croix from "/src/assets/cross.svg";
 
 function GrilleVariant({
-                    grid,
-                    setGrid,
-                    currentPlayer,
-                    setCurrentPlayer,
-                    winner,
-                    setWinner,
-                    setIsDraw,
-                    modeDeJeu,
-                    sauvegarderDernierePartie,
-                    scoreX,
-                    Ties,
-                    scoreO,
-                    isDraw,
-                    stockerLocal,
-                }) {
-    const [isDisabled, setIsDisabled] = useState(false);
-    const [firstLoss, setFirstLoss] = useState(false);
-    const [historyX, setHistoryX] = useState([]);
-    const [historyO, setHistoryO] = useState([]);
+                           grid,
+                           setGrid,
+                           currentPlayer,
+                           setCurrentPlayer,
+                           winner,
+                           setWinner,
+                           setIsDraw,
+                           modeDeJeu,
+                           sauvegarderDernierePartie,
+                           scoreX,
+                           Ties,
+                           scoreO,
+                           isDraw,
+                           stockerLocal,
+                           symboleChoisi,
 
+                       }) {
+    const countOccurrences = (grid, symbol) => {
+        return grid.reduce((count, row) => {
+            return count + row.filter(cell => cell === symbol).length;
+        }, 0);
+    };
 
+// Récupérer la dernière partie pour initialiser les historiques
+    const dernierePartie = JSON.parse(localStorage.getItem("dernierePartie"));
+
+    const initialHistoryX = dernierePartie
+        ? Array(countOccurrences(dernierePartie.grille, "X")).fill("X")
+        : [];
+    const initialHistoryO = dernierePartie
+        ? Array(countOccurrences(dernierePartie.grille, "O")).fill("O")
+        : [];
+
+// Initialisation des états
+    const [historyX, setHistoryX] = useState(initialHistoryX);
+    const [historyO, setHistoryO] = useState(initialHistoryO);
+
+    // Vérification du gagnant
     const checkWinner = (grid) => {
         for (let row of grid) {
             if (row.every((cell) => cell === "O")) return "O";
@@ -31,24 +48,40 @@ function GrilleVariant({
         }
 
         for (let col = 0; col < 3; col++) {
-            if (grid[0][col] && grid[0][col] === grid[1][col] && grid[1][col] === grid[2][col]) {
+            if (
+                grid[0][col] &&
+                grid[0][col] === grid[1][col] &&
+                grid[1][col] === grid[2][col]
+            ) {
                 return grid[0][col];
             }
         }
-        if (grid[0][0] && grid[0][0] === grid[1][1] && grid[1][1] === grid[2][2]) {
+
+        if (
+            grid[0][0] &&
+            grid[0][0] === grid[1][1] &&
+            grid[1][1] === grid[2][2]
+        ) {
             return grid[0][0];
         }
-        if (grid[0][2] && grid[0][2] === grid[1][1] && grid[1][1] === grid[2][0]) {
+
+        if (
+            grid[0][2] &&
+            grid[0][2] === grid[1][1] &&
+            grid[1][1] === grid[2][0]
+        ) {
             return grid[0][2];
         }
 
         return null;
     };
 
+    // Vérification du match nul
     const checkDraw = (grid) => {
         return grid.every((row) => row.every((cell) => cell !== null));
     };
 
+    // Gestion du clic d'un joueur
     const handleClick = (rowIndex, colIndex) => {
         if (grid[rowIndex][colIndex] || winner) return;
 
@@ -58,33 +91,26 @@ function GrilleVariant({
             )
         );
 
+        let newHistory;
         if (currentPlayer === "X") {
-            const newHistoryX = [...historyX, [rowIndex, colIndex]];
-            if (newHistoryX.length > 3) {
-                const [removedRow, removedCol] = newHistoryX.shift();
-                newGrid[removedRow][removedCol] = null;
+            newHistory = [...historyX, [rowIndex, colIndex]];
+            if (newHistory.length > 3) {
+                const [oldRow, oldCol] = newHistory.shift();
+                newGrid[oldRow][oldCol] = null; // Supprimer l'ancien symbole
             }
-            setHistoryX(newHistoryX);
-        } else if (currentPlayer === "O") {
-            const newHistoryO = [...historyO, [rowIndex, colIndex]];
-            if (newHistoryO.length > 3) {
-                const [removedRow, removedCol] = newHistoryO.shift();
-                newGrid[removedRow][removedCol] = null;
+            setHistoryX(newHistory);
+        } else {
+            newHistory = [...historyO, [rowIndex, colIndex]];
+            if (newHistory.length > 3) {
+                const [oldRow, oldCol] = newHistory.shift();
+                newGrid[oldRow][oldCol] = null; // Supprimer l'ancien symbole
             }
-            setHistoryO(newHistoryO);
+            setHistoryO(newHistory);
         }
 
         const potentialWinner = checkWinner(newGrid);
         if (potentialWinner) {
             setWinner(potentialWinner);
-            setHistoryO([]);
-            setHistoryX([]);
-            if (potentialWinner === "O" && !firstLoss && modeDeJeu === "ordinateur") {
-                setFirstLoss(true);
-                stockerLocal(scoreX);
-                setHistoryO([]);
-                setHistoryX([]);
-            }
         } else if (checkDraw(newGrid)) {
             setIsDraw(true);
         } else {
@@ -94,6 +120,8 @@ function GrilleVariant({
         setGrid(newGrid);
     };
 
+
+    // Jeu du bot
     const botPlay = () => {
         const emptyCells = [];
         for (let i = 0; i < 3; i++) {
@@ -102,17 +130,23 @@ function GrilleVariant({
             }
         }
 
-        const randomMove = emptyCells[Math.floor(Math.random() * emptyCells.length)];
-        handleClick(randomMove.row, randomMove.col);
+        if (emptyCells.length > 0) {
+            const randomMove = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+            handleClick(randomMove.row, randomMove.col);
+        }
     };
 
+    // Effet pour le bot
     useEffect(() => {
-        if (modeDeJeu === "ordinateur" && currentPlayer === "O" && !winner) {
-            setIsDisabled(true);
-            setTimeout(() => {
+        if (
+            modeDeJeu === "ordinateur" &&
+            currentPlayer !== symboleChoisi &&
+            !winner
+        ) {
+            const botTimeout = setTimeout(() => {
                 botPlay();
-                setIsDisabled(false);
-            }, 1000);
+            }, 400);
+            return () => clearTimeout(botTimeout);
         }
     }, [currentPlayer, grid, winner, modeDeJeu]);
 
@@ -123,8 +157,26 @@ function GrilleVariant({
         }
     }, [grid, currentPlayer, winner, isDraw, scoreX, scoreO, Ties]);
 
+    useEffect(() => {
+        const dernierePartie = JSON.parse(localStorage.getItem("dernierePartie"));
+
+        if (dernierePartie) {
+            // Restauration de l'historique des coups (pour X et O)
+            setHistoryX(dernierePartie.historyX || []);
+            setHistoryO(dernierePartie.historyO || []);
+
+            // Restauration de la grille
+            setGrid(dernierePartie.grille || Array(3).fill(Array(3).fill(null)));
+
+            // Restauration des autres informations de jeu
+            setCurrentPlayer(dernierePartie.players.currentPlayer || 'O');
+            setWinner(dernierePartie.resultats.winner || null);
+            setIsDraw(dernierePartie.resultats.isDraw || false);
+        }
+    }, []);
+
     return (
-        <div className="space-y-4 w-full mx-auto mt-2 sm:mt-10 p-3.5 relative">
+        <div className="space-y-4 w-full mx-auto mt-2 mb-4 p-3.5 relative">
             {grid.map((row, rowIndex) => (
                 <div key={rowIndex} className="flex justify-between">
                     {row.map((cell, colIndex) => (
@@ -132,16 +184,12 @@ function GrilleVariant({
                             key={colIndex}
                             onClick={() => handleClick(rowIndex, colIndex)}
                             className="h-20 w-20 sm:h-28 sm:w-28 flex justify-center items-center border-b-8 border-[#0E1E27] p-4 rounded-2xl bg-[#1D313C] shadow-2xl cursor-pointer select-none"
-                            style={{ pointerEvents: isDisabled ? "none" : "auto" }}
                         >
                             {cell ? (
                                 <img
                                     src={cell === "O" ? rond : croix}
                                     alt=""
-                                    className={`transition-all duration-300 ${cell === "O" ? "opacity-100" : "opacity-100"}`}
-                                    style={{
-                                        animation: cell === "O" ? "shrink 0.5s ease-out" : "none",
-                                    }}
+                                    className="transition-all duration-300"
                                 />
                             ) : null}
                         </div>
