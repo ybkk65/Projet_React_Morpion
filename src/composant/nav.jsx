@@ -32,7 +32,7 @@ function Nav() {
         <>
             {/* Barre de navigation */}
             <nav className="bg-transparent fixed top-0 w-full z-30 backdrop-blur-md">
-                <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto px-4 pb-2">
+                <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto px-4 mb-2">
                     <div
                         className="flex md:mr-24 items-center space-x-3 rtl:space-x-reverse cursor-pointer"
                         onClick={() => handleNavigation("/")}
