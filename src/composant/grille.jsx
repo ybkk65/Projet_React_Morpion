@@ -17,6 +17,7 @@ function Grille({
                     scoreO,
                     isDraw,
                     stockerLocal,
+                    symboleChoisi
 
                 }) {
     const [isDisabled, setIsDisabled] = useState(false);
@@ -59,9 +60,10 @@ function Grille({
         const potentialWinner = checkWinner(newGrid);
         if (potentialWinner) {
             setWinner(potentialWinner);
-            if (potentialWinner === "O" && !firstLoss && modeDeJeu === "ordinateur") {
+            if (potentialWinner !== symboleChoisi && !firstLoss && modeDeJeu === "ordinateur") {
                 setFirstLoss(true);
-                stockerLocal(scoreX);
+                console.log("Première perte contre le bot !");
+                stockerLocal(symboleChoisi === "O" ? scoreX : scoreO);
             }
         } else if (checkDraw(newGrid)) {
             setIsDraw(true);
@@ -85,7 +87,7 @@ function Grille({
     };
 
     useEffect(() => {
-        if (modeDeJeu === "ordinateur" && currentPlayer === "O" && !winner) {
+        if (modeDeJeu === "ordinateur" && currentPlayer !== symboleChoisi && !winner) {
             setIsDisabled(true);
             setTimeout(() => {
                 botPlay();
@@ -102,7 +104,7 @@ function Grille({
     }, [grid, currentPlayer, winner, isDraw, scoreX, scoreO, Ties]);
 
     return (
-        <div className="space-y-4 w-full mx-auto mt-2 sm:mt-10 p-3.5 relative">
+        <div className="space-y-4 w-full mx-auto mt-2 mb-4 p-3.5 relative">
             {grid.map((row, rowIndex) => (
                 <div key={rowIndex} className="flex justify-between">
                     {row.map((cell, colIndex) => (
